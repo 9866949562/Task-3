@@ -1,0 +1,229 @@
+1.Design a java program that uses OOP principles to model the book management system. Create two classes:book and library .The book class should have attriutes such as bookID,title,author,and isAvailable.The library class should include an array to store book obects.
+Provide methods to add book,remove book and search book(using id) and display books.write a java program that demonstrates the use of these classes and methods by allowing the users to interact with the library system. 
+
+
+package test;
+
+public class Book {
+	int bookID;
+	String title;
+	String author;
+	boolean isAvailable;
+	public Book(int bookID,String title,String author) {
+		this.bookID=bookID;
+		this.title=title;
+		this.author=author;
+		this.isAvailable=true;
+		
+	}
+	public int getBookID() {
+		return bookID;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public String getAuthor(){
+		return author;
+	}
+	public boolean isAvailable() {
+		return isAvailable;
+	}
+	public void setAvailable(boolean available) {
+		isAvailable=available;
+	}
+	@Override
+	public String toString() {
+		return"Book ID:"+bookID+", Title:"+title+", Author:"+author+",Available:"+isAvailable;
+	}
+
+}
+
+class Library{
+	Book[] books;
+	int bookCount;
+	public Library(int capacity) {
+		books=new Book[capacity];
+		bookCount=0;
+	}
+	public void addBook(Book book) {
+		if(bookCount<books.length) {
+			books[bookCount]=book;
+			bookCount++;
+			System.out.println("Book added to the library.");
+		}else {
+			System.out.println("Library is full.cannot add more boos.");
+		}
+	}
+	public void removeBook(int bookID) {
+	
+		for(int i=0;i<bookCount;i++) {
+			if(books[i].getBookID()==bookID) {
+				books[i].setAvailable(false);
+				System.out.println("Book removed from the library.");
+				return;
+			}
+		}
+		System.out.println("Book with ID"+bookID+"not found in the library.");
+	}
+	public void searchBook(int bookID) {
+		for(int i=0;i<bookCount;i++) {
+			if(books[i].getBookID()==bookID) {
+				System.out.println("Book found in the library:\n"+books[i]);
+				return;
+			}
+		}
+		System.out.println("Book with ID"+bookID+"not found in the library.");
+	}
+	public void displayBooks() {
+		System.out.println("Books in the library:");
+		for(int i=0;i<bookCount;i++) {
+			System.out.println(books[i]);
+		}
+	}
+
+
+
+	public static void main(String[] args) {
+		Library library=new Library(10);
+		Book book1=new Book(1, "Book Title 1","Author 1");
+		Book book2=new Book(2, "Book Title 2","Author 2");	
+		Book book3=new Book(3, "Book Title 3","Author 3");
+		 library.addBook(book1);
+		 library.addBook(book2);
+		 library.addBook(book3); 
+		  
+		 library.displayBooks();
+		 library.searchBook(2);
+		 library.removeBook(2);
+		 library.displayBooks();
+}
+
+}
+
+
+OUTPUT:
+
+Book added to the library.
+Book added to the library.
+Book added to the library.
+Books in the library:
+Book ID:1, Title:Book Title 1, Author:Author 1,Available:true
+Book ID:2, Title:Book Title 2, Author:Author 2,Available:true
+Book ID:3, Title:Book Title 3, Author:Author 3,Available:true
+Book found in the library:
+Book ID:2, Title:Book Title 2, Author:Author 2,Available:true
+Book removed from the library.
+Books in the library:
+Book ID:1, Title:Book Title 1, Author:Author 1,Available:true
+Book ID:2, Title:Book Title 2, Author:Author 2,Available:false
+Book ID:3, Title:Book Title 3, Author:Author 3,Available:true
+
+
+
+2.Create interface taxable with members salesTax=7% and incomeTax=10.5%.create abstract method calcTax().
+a.create class employee(empId,name,salary)and implement taxable to calculate incometax on yearly salary.
+b.Create class product(pid,price,quantity)and implement taxable to calculate salestax on unit price of product.
+c.create class for main method (say XYZ),accept employee information and a product information from user and print income tax and sales tax respectively.
+
+
+package org.abstraction;
+
+import java.util.Scanner;
+
+interface Taxable {
+    double salesTax = 0.07;   // 7%
+    double incomeTax = 0.105; // 10.5%
+    
+    void calcTax();
+}
+
+class Employee implements Taxable {
+    private int empId;
+    private String name;
+    private double salary;
+
+    public Employee(int empId, String name, double salary) {
+        this.empId = empId;
+        this.name = name;
+        this.salary = salary;
+    }
+
+    @Override
+    public void calcTax() {
+        double incomeTaxAmount = salary * incomeTax;
+        System.out.println("Income Tax for Employee " + name + ": $" + incomeTaxAmount);
+    }
+}
+
+class Product implements Taxable {
+    private int pid;
+    private double price;
+    private int quantity;
+
+    public Product(int pid, double price, int quantity) {
+        this.pid = pid;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    @Override
+    public void calcTax() {
+        double salesTaxAmount = price * salesTax * quantity;
+        System.out.println("Sales Tax for Product with ID " + pid + ": $" + salesTaxAmount);
+    }
+
+
+//public class XYZ {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter Employee ID: ");
+        int empId = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter Employee Name: ");
+        String empName = scanner.nextLine();
+        System.out.print("Enter Employee Salary: ");
+        double empSalary = scanner.nextDouble();
+
+        Employee employee = new Employee(empId, empName, empSalary);
+        employee.calcTax();
+
+        System.out.print("Enter Product ID: ");
+        int prodId = scanner.nextInt();
+        System.out.print("Enter Product Price: ");
+        double prodPrice = scanner.nextDouble();
+        System.out.print("Enter Product Quantity: ");
+        int prodQuantity = scanner.nextInt();
+
+        Product product = new Product(prodId, prodPrice, prodQuantity);
+        product.calcTax();
+
+        scanner.close();
+    }
+}
+
+
+OUTPUT:
+
+Enter Employee ID: 22
+Enter Employee Name: Aru
+Enter Employee Salary: 50000
+Income Tax for Employee Aru: $5250.0
+Enter Product ID: 444
+Enter Product Price: 1000
+Enter Product Quantity: 4
+Sales Tax for Product with ID 444: $280.0
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
